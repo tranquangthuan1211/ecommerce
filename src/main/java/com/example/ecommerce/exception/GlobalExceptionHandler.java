@@ -1,0 +1,27 @@
+package com.example.ecommerce.exception;
+
+import com.example.ecommerce.dto.response.ApiResponse;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.http.ResponseEntity;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = RuntimeException.class)
+    ResponseEntity<ApiResponse>handlingRuntimException(RuntimeException exception){
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage(ErrorCode.USER_NOT_EXISTS.getMessage());
+        apiResponse.setCode(ErrorCode.USER_EXISTED.getCode());
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    @ExceptionHandler(value = AppException.class)
+    ResponseEntity<ApiResponse>handlingAppException(AppException exception){
+        ErrorCode errorCode = exception.getErrorCode();
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
+}
