@@ -2,7 +2,8 @@ package com.example.ecommerce.exception;
 
 public enum ErrorCode {
     USER_EXISTED(1001, "user existed"),
-    USER_NOT_EXISTS(1005,"user not exists");
+    USER_NOT_EXISTS(1005,"user not exists"),
+    UNAUTHENTICATED(1006,"Unauthenticated");
     private final int code;
     private final String message;
 

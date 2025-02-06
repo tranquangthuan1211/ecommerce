@@ -24,6 +24,7 @@ public class UserController {
         return apiResponse;
     }
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<String> getUsers(){
         ApiResponse<String> apiResponse = new ApiResponse<>();
         apiResponse.setCode(1000);
