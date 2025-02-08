@@ -41,7 +41,7 @@ public class AuthenticationService {
         System.out.println(1);
         System.out.println(request.getPhone());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        User user = userRepository.findByPhone("123456789")
+        User user = userRepository.findByPhone(request.getPhone())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if(!authenticated){

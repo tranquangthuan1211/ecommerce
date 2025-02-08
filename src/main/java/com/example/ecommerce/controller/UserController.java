@@ -7,6 +7,8 @@ import com.example.ecommerce.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -25,11 +27,11 @@ public class UserController {
     }
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponse<String> getUsers(){
-        ApiResponse<String> apiResponse = new ApiResponse<>();
+    ApiResponse<List<User>> getUsers(){
+        ApiResponse<List<User>> apiResponse = new ApiResponse<>();
         apiResponse.setCode(1000);
         apiResponse.setMessage("get users successfully");
-        apiResponse.setData("hello");
+        apiResponse.setData(userService.geAllUser());
         return apiResponse;
     }
 
