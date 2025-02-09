@@ -1,6 +1,7 @@
 package com.example.ecommerce.controller;
 
 import com.example.ecommerce.dto.request.UserCreationalRequest;
+import com.example.ecommerce.dto.request.UserUpdateRequest;
 import com.example.ecommerce.dto.response.ApiResponse;
 import com.example.ecommerce.entity.User;
 import com.example.ecommerce.service.UserService;
@@ -33,6 +34,14 @@ public class UserController {
         apiResponse.setMessage("get users successfully");
         apiResponse.setData(userService.geAllUser());
         return apiResponse;
+    }
+    @PutMapping("/{userId}")
+    ApiResponse<User> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request){
+        return ApiResponse.<User>builder()
+                .data(userService.uploadUser(userId,request))
+                .message("user update successfully")
+                .code(200)
+                .build();
     }
 
 }

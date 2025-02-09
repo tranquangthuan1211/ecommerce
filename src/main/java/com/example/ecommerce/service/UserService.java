@@ -1,6 +1,7 @@
 package com.example.ecommerce.service;
 
 import com.example.ecommerce.dto.request.UserCreationalRequest;
+import com.example.ecommerce.dto.request.UserUpdateRequest;
 import com.example.ecommerce.entity.User;
 import com.example.ecommerce.enums.Role;
 import com.example.ecommerce.exception.AppException;
@@ -42,5 +43,14 @@ public class UserService {
     }
     public List<User> geAllUser(){
         return userRepository.findAll();
+    }
+    public User uploadUser(String userId, UserUpdateRequest request){
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
+
+        userMapper.updateUser(user, request);
+        return userRepository.save(user);
+    }
+    public void deleteUser(String userId) {
+        userRepository.deleteById(userId);
     }
 }
