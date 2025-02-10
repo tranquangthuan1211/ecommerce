@@ -9,7 +9,9 @@ import com.example.ecommerce.exception.ErrorCode;
 import com.example.ecommerce.mapper.UserMapper;
 import com.example.ecommerce.repository.UserRepository;
 import lombok.Data;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,12 +46,18 @@ public class UserService {
     public List<User> geAllUser(){
         return userRepository.findAll();
     }
+    @PostAuthorize("returnObject.name == authentication.name")
     public User uploadUser(String userId, UserUpdateRequest request){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        System.out.println(name);
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
-
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         userMapper.updateUser(user, request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         return userRepository.save(user);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }

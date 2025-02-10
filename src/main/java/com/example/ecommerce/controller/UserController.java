@@ -5,6 +5,7 @@ import com.example.ecommerce.dto.request.UserUpdateRequest;
 import com.example.ecommerce.dto.response.ApiResponse;
 import com.example.ecommerce.entity.User;
 import com.example.ecommerce.service.UserService;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,6 @@ public class UserController {
         return apiResponse;
     }
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<List<User>> getUsers(){
         ApiResponse<List<User>> apiResponse = new ApiResponse<>();
         apiResponse.setCode(1000);
