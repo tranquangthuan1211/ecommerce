@@ -6,12 +6,14 @@ import com.example.ecommerce.configuration.CloudinaryConfig;
 import com.example.ecommerce.dto.request.ProductCreationalRequest;
 import com.example.ecommerce.entity.Image;
 import com.example.ecommerce.entity.Product;
+import com.example.ecommerce.entity.User;
 import com.example.ecommerce.repository.ImageRepository;
 import com.example.ecommerce.repository.ProductRepository;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -46,4 +48,8 @@ public class ProductService {
 
         return productRepository.save(product);
     }
+    public List<Product> getAllProduct(){
+        return productRepository.findAll();
+    }
+
 }
