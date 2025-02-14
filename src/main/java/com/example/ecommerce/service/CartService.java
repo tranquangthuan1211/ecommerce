@@ -46,22 +46,34 @@ public class CartService {
         cart.setUser(user.get());
         return cartRepository.save(cart);
     }
-    public Cart addToCart(CartRequest request,String cartId){
-        Optional<Cart> cartOptional = cartRepository.findById(cartId);
+    public Cart addToCart(CartRequest request){
         Optional<Product> productOptional = productRepository.findById(request.getProduct_id());
-
-        if (cartOptional.isPresent() && productOptional.isPresent()) {
-            Cart cart = cartOptional.get();
+        Optional<User> user = userRepository.findById(request.getUser_id());
+        if (productOptional.isPresent()) {
+            Cart newCart = new Cart();
             Product product = productOptional.get();
             CartItem cartItem = new CartItem();
             cartItem.setProduct(product);
             cartItem.setQuantity(request.getQuantity());
+            cartItemRepository.save(cartItem);
             HashSet<CartItem> items = new HashSet<>();
             items.add(cartItem);
-            cart.setItems(items);
-            return cart;
+            newCart.setItems(items);
+            newCart.setUser(user.get());
+            return cartRepository.save(newCart);
         } else {
             throw new RuntimeException("Cart or Product not found");
+        }
+    }
+    public void clearCartItem(String cartId){
+        Optional<Cart> cartOptional = cartRepository.findById(cartId);
+
+        if(cartOptional.isPresent()){
+            Cart cart = cartOptional.get();
+            cart.getItems().clear();
+            cartRepository.deleteById(cartId);
+        }else {
+            throw new RuntimeException("Cart not found");
         }
     }
 }

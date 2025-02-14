@@ -5,10 +5,7 @@ import com.example.ecommerce.dto.response.ApiResponse;
 import com.example.ecommerce.entity.Cart;
 import com.example.ecommerce.service.CartService;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/carts")
@@ -18,13 +15,21 @@ public class CartController {
         this.cartService = cartService;
     }
     @PostMapping
-    public ApiResponse<Cart> createCart(@RequestBody CartRequest request) {
-        System.out.println("1");
+    ApiResponse<Cart> addToCart(@RequestBody CartRequest request){
+
         return ApiResponse.<Cart>builder()
-                .message("Cart created successfully")
+                .message("add successfully")
                 .code(200)
-                .data(cartService.creteCart(request))
+                .data(cartService.addToCart(request))
                 .build();
     }
-
+    @DeleteMapping("/{cartId}")
+    ApiResponse<Cart> clearItem(@PathVariable String cartId){
+        cartService.clearCartItem(cartId);
+        return ApiResponse.<Cart>builder()
+                .message("pay successfully")
+                .code(200)
+                .data(null)
+                .build();
+    }
 }

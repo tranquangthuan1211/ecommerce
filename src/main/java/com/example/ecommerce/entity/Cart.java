@@ -21,6 +21,6 @@ public class Cart {
     @JoinColumn(name = "user",referencedColumnName = "id")
     private User user;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cartItem", referencedColumnName = "id")
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private Set<CartItem> items;
 }
