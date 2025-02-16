@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class  Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;

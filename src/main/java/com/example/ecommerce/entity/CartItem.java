@@ -1,5 +1,7 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,4 +15,7 @@ public class CartItem {
     @JoinColumn(name = "product", referencedColumnName = "id")
     private Product product;
     private int quantity;
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 }

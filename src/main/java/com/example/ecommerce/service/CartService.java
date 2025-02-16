@@ -1,6 +1,7 @@
 package com.example.ecommerce.service;
 
 import com.example.ecommerce.dto.request.CartRequest;
+import com.example.ecommerce.dto.response.CartResponse;
 import com.example.ecommerce.entity.Cart;
 import com.example.ecommerce.entity.CartItem;
 import com.example.ecommerce.entity.Product;
@@ -39,28 +40,30 @@ public class CartService {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
     }
-    public Cart creteCart(CartRequest request) {
+    public Cart createCart(CartRequest request) {
         Optional<User> user = userRepository.findById(request.getUser_id());
-        if(!user.isPresent()) throw new AppException(ErrorCode.USER_NOT_EXISTS);
+        if(user.isEmpty()) throw new AppException(ErrorCode.USER_NOT_EXISTS);
         Cart cart = new Cart();
         cart.setUser(user.get());
         return cartRepository.save(cart);
     }
-    public Cart addToCart(CartRequest request){
-        Optional<Product> productOptional = productRepository.findById(request.getProduct_id());
-        Optional<User> user = userRepository.findById(request.getUser_id());
-        if (productOptional.isPresent()) {
-            Cart newCart = new Cart();
-            Product product = productOptional.get();
-            CartItem cartItem = new CartItem();
-            cartItem.setProduct(product);
-            cartItem.setQuantity(request.getQuantity());
-            cartItemRepository.save(cartItem);
-            HashSet<CartItem> items = new HashSet<>();
-            items.add(cartItem);
-            newCart.setItems(items);
-            newCart.setUser(user.get());
-            return cartRepository.save(newCart);
+    public CartResponse getCart(String cartId){
+        Optional<Cart> cart = cartRepository.findById(cartId);
+        if(cart.isEmpty()) throw new RuntimeException("cart not found");
+
+        return new CartResponse(cart.get());
+    }
+    public CartResponse addToCart(String cartId, CartRequest request) {
+        Optional<Cart> optionalCart = cartRepository.findById(cartId);
+        Optional<Product> product = productRepository.findById(request.getProduct_id());
+        if (optionalCart.isPresent()) {
+            CartItem item = new CartItem();
+            Cart cart = optionalCart.get();
+            item.setCart(cart);
+            item.setProduct(product.get());
+            item.setQuantity(request.getQuantity());
+            cartItemRepository.save(item);
+            return new CartResponse(optionalCart.get());
         } else {
             throw new RuntimeException("Cart or Product not found");
         }
@@ -70,7 +73,6 @@ public class CartService {
 
         if(cartOptional.isPresent()){
             Cart cart = cartOptional.get();
-            cart.getItems().clear();
             cartRepository.deleteById(cartId);
         }else {
             throw new RuntimeException("Cart not found");
