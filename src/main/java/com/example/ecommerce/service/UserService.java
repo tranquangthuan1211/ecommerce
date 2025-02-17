@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -46,6 +47,13 @@ public class UserService {
     public List<User> geAllUser(){
         return userRepository.findAll();
     }
+    public User getUserById(String userId){
+        Optional<User> myInfor = userRepository.findById(userId);
+        if(myInfor.isEmpty()) throw new RuntimeException("user not found");
+
+        return myInfor.get();
+    }
+
     @PostAuthorize("returnObject.name == authentication.name")
     public User uploadUser(String userId, UserUpdateRequest request){
         var context = SecurityContextHolder.getContext();
