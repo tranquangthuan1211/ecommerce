@@ -19,3 +19,14 @@ cloudinary:
   cloud-name: "dx0w9qtkb"
   api-key: "565134245168361"
   api-secret-key: "BV50s-FtkGlqNJDYN1hu2z0HEFM"
+mail:
+  host: "smtp.gmail.com"
+  port: 587
+  username:
+  password:
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
